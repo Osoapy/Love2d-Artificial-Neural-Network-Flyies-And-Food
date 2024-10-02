@@ -1,3 +1,4 @@
-local brain = {}
+function newBrain()
+end
 
-return brain
+return newBrain

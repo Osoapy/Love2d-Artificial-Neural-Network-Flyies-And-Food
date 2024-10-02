@@ -1,3 +1,4 @@
-local fly = {}
+function newFly()
+end
 
-return fly
+return newFly
