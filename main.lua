@@ -1,9 +1,13 @@
 -- Importing
-require("functions.drawLayout")
+require("data.functions.drawLayout")
 require("source.population")
 
 -- Recieving proportions
 local screenHeight, screenWidth = love.graphics.getHeight(), love.graphics.getWidth()
+
+-- Path variables
+local fontPath = "data.assets/jetBrains.ttf"
+local backgroundPath = "data.assets/background.png"
 
 --[[
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -39,11 +43,11 @@ function love.load()
     love.window.setTitle("Better And Better Flyies")
 
     -- Load the font
-    myFont = love.graphics.newFont("assets/jetBrains.ttf", 26)
+    myFont = love.graphics.newFont(fontPath, 26)
     love.graphics.setFont(myFont)
 
     -- Load the background
-    background = love.graphics.newImage("assets/background.png")
+    background = love.graphics.newImage(backgroundPath)
     assert(background, "Loading error on background.png!")
 end
 
