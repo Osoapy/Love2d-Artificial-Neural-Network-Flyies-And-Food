@@ -10,3 +10,12 @@ function copyTable(dest, src)
         dest[k] = v
     end
 end
+
+function dist(x1, y1, x2, y2)
+    return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
+end
+
+function randomVector()
+    local randomAngle = love.math.random() * 2 * math.pi 
+    return {x = math.cos(randomAngle), y = math.sin(randomAngle)} 
+end

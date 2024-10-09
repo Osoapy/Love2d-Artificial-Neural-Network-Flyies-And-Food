@@ -1,38 +1,47 @@
+-- Importing
 require("source.fly")
 require("source.functions")
 
-function newPopulation()
+-- Create population function
+function newPopulation(numFlyies, numSteps)
     -- Creating the object
     local population = {
+
         -- Atributtes
         fitnessSum = 0,
-        genetarion = 1,
+        generation = 1,
         bestFlyIndex = 0,
-        minSteps = 0,
+        maxSteps = numSteps,
 
-        -- Variables
+        -- Tables
         flyies = {},
 
         -- Functions
-        populate = function (self, size)
-            for i = 1, size, 1 do
-                table.insert(self.flyies, i, newFly()) 
+        show = function(self)
+            for i = 1, numFlyies, 1 do
+                self.flyies[i]:show()
             end
         end,
 
-        update = function (self) 
-            for i, fly in ipairs(self.flyies) do
-                if (fly.brain.step > self.minSteps) then--if the dot has already taken more steps than the best dot has taken to reach the goal
-                    fly.dead = true; --then it dead
+        populate = function(self, size)
+            for i = 1, size, 1 do
+                table.insert(self.flyies, i, newFly(self.maxSteps)) 
+            end
+        end,
+
+        update = function(self) 
+            for i = 2, #self.flyies, 1 do
+                if self.flyies[i].brain.step > self.maxSteps then -- if the dot has already taken more steps than the best dot has taken to reach the goal kill him
+                    self.flyies[i].dead = true; 
                 else
-                    fly.update()
+                    self.flyies[i]:update()
                 end
             end
         end,
 
-        calculateFitness = function(self)
-            for i, fly in ipairs(self.flyies) do
-                fly.calculateFitness()
+        calculateFitness = function(self, food)
+            for i = 1, #self.flyies, 1 do
+                self.flyies[i]:calculateFitness(food)
             end
         end,
 
@@ -48,16 +57,16 @@ function newPopulation()
 
         naturalSelection = function(self)
             local newFlyies = {}
-            self.setBestFly()
-            self.calculateFitnessSum()
+            self:setBestFly()
+            self:calculateFitnessSum()
 
-            newFlyies[1] = self.flyies[self.bestFly].getBrain()
+            newFlyies[1] = self.flyies[self.bestFlyIndex].brain:getBrain()
             newFlyies[1].isBest = true
 
             for i = 2, #self.flyies, 1 do
-                local flyParent = self.selectParent()
+                local flyParent = self:selectParent()
 
-                newFlyies[i] = flyParent.getBrain()
+                newFlyies[i] = flyParent.brain:getBrain()
             end
 
             clearTable(self.flyies)
@@ -66,7 +75,7 @@ function newPopulation()
             self.generation = self.generation + 1
         end,
 
-        calculateFitnessSum = function(self)
+        calculateFitnessSum = function(self, food)
             self.fitnessSum = 0
 
             for i = 1, #self.flyies, 1 do
@@ -75,9 +84,15 @@ function newPopulation()
         end,
 
         selectParent = function(self)
+            self:calculateFitnessSum()
+
+            if self.fitnessSum == 0 then
+                return self.flyies[math.random(1, #self.flyies)] -- Return random fly if fitness = 0
+            end
+        
             local rand = math.random(self.fitnessSum)
             local runningSum = 0
-
+        
             for i = 1, #self.flyies, 1 do
                 runningSum = runningSum + self.flyies[i].fitness
                 if runningSum >= rand then
@@ -85,12 +100,13 @@ function newPopulation()
                 end
             end
 
-            return nil
+            -- Shouldn't go here
+            return self.flyies[math.random(1, #self.flyies)]
         end,
 
         mutateFlyies = function(self)
             for i = 2, #self.flyies, 1 do
-                self.flyies[i].mutate()
+                self.flyies[i]:mutate()
             end
         end,
 
@@ -107,11 +123,14 @@ function newPopulation()
 
             self.bestFlyIndex = maxIndex
 
-            if self.flyies[self.bestFlyIndex].reachedFood() then
-                self.minSteps = self.flyies[self.bestFlyIndex].brain.steps
+            if self.flyies[self.bestFlyIndex].reachedFood then
+                self.maxSteps = self.flyies[self.bestFlyIndex].brain.steps
             end
         end
     }
+
+    -- Populating the test
+    population:populate(numFlyies)
 
     -- Returning the object
     return population
