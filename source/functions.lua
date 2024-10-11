@@ -16,6 +16,8 @@ function dist(x1, y1, x2, y2)
 end
 
 function randomVector()
-    local randomAngle = love.math.random() * 2 * math.pi 
-    return {x = math.cos(randomAngle), y = math.sin(randomAngle)} 
+    local angle = math.random() * 2 * math.pi
+    local x = math.cos(angle)
+    local y = math.sin(angle)
+    return x, y
 end

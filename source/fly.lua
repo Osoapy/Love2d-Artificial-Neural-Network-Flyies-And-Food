@@ -3,7 +3,7 @@ require("source.brain")
 require("source.functions")
 
 -- Create fly function
-function newFly(maxSteps)
+function newFly(maxSteps, maxSpeed)
     -- Dynamic atributtes
     local screenHeight = love.graphics.getHeight()
     local screenWidth = love.graphics.getWidth()
@@ -56,7 +56,9 @@ function newFly(maxSteps)
 
             local maxSpeed = 1
             if self.vel.x > maxSpeed then self.vel.x = maxSpeed end
+            if self.vel.x < -maxSpeed then self.vel.x = -maxSpeed end
             if self.vel.y > maxSpeed then self.vel.y = maxSpeed end
+            if self.vel.y < -maxSpeed then self.vel.y = -maxSpeed end 
 
             self.position.x = self.position.x + self.vel.x
             self.position.y = self.position.y + self.vel.y
@@ -68,10 +70,8 @@ function newFly(maxSteps)
 
                 if self.position.x < 2 or self.position.y < 2 or self.position.x > love.graphics.getWidth() - 2 or self.position.y > love.graphics.getHeight() - 2 then
                     self.dead = true
-                elseif dist(self.position.x, self.position.y, food.x, food.y) < 5 then
+                elseif dist(self.position.x, self.position.y, food.x, food.y) < food.radius then
                     self.reachedFood = true
-                elseif self.position.x < 600 and self.position.y < 310 and self.position.x > 0 and self.position.y > 300 then
-                    self.dead = true
                 end
             end
         end,
@@ -86,7 +86,7 @@ function newFly(maxSteps)
         end,
 
         clone = function()
-            local babyFly = newFly(maxSteps)
+            local babyFly = newFly(maxSteps, maxSpeed)
             babyFly.brain = self.brain:clone()
             return babyFly
         end

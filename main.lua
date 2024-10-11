@@ -9,6 +9,9 @@ local screenHeight, screenWidth = love.graphics.getHeight(), love.graphics.getWi
 local fontPath = "data/assets/jetBrains.ttf"
 local backgroundPath = "data/assets/background.png"
 
+-- Global variables
+test = nil
+
 --[[
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ]]
@@ -23,8 +26,9 @@ local food = { -- Food coords
     radius = 10
 }
 
-local numFlyies = 10 -- Number of flyies
-local maxSteps = 10 -- Max of steps
+local numFlyies = 20 -- Number of flyies
+local maxSteps = 100 -- Max of steps
+local maxSpeed = 25 -- Max of speed
 
 --[[
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -42,6 +46,9 @@ love.window.setMode(600, 600, {
 })
 
 function love.load()
+    -- Setting a pseudo-randomic seed 
+    math.randomseed(os.time())
+
     -- Setting the title
     love.window.setTitle(title)
 
@@ -54,7 +61,7 @@ function love.load()
     assert(background, "Loading error on background.png!")
 
     -- Load the population
-    test = newPopulation(numFlyies, maxSteps) -- Object population
+    test = newPopulation(numFlyies, maxSteps, maxSpeed, food) -- Object population
 end
 
 function love.update(dt)
@@ -71,7 +78,7 @@ end
 
 function love.draw()
     -- Layer 0 (background)
-    --drawBackground(background)
+    drawBackground(background)
 
     -- Layer 1 (food)
     love.graphics.setColor(1, 1, 1) -- Green

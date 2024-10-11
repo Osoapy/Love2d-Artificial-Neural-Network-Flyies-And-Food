@@ -3,7 +3,7 @@ require("source.fly")
 require("source.functions")
 
 -- Create population function
-function newPopulation(numFlyies, numSteps)
+function newPopulation(numFlyies, numSteps, maxSpeed, food)
     -- Creating the object
     local population = {
 
@@ -25,7 +25,7 @@ function newPopulation(numFlyies, numSteps)
 
         populate = function(self, size)
             for i = 1, size, 1 do
-                table.insert(self.flyies, i, newFly(self.maxSteps)) 
+                table.insert(self.flyies, i, newFly(self.maxSteps, maxSpeed)) 
             end
         end,
 
@@ -34,7 +34,7 @@ function newPopulation(numFlyies, numSteps)
                 if self.flyies[i].brain.step > self.maxSteps then -- if the dot has already taken more steps than the best dot has taken to reach the goal kill him
                     self.flyies[i].dead = true; 
                 else
-                    self.flyies[i]:update()
+                    self.flyies[i]:update(food)
                 end
             end
         end,
