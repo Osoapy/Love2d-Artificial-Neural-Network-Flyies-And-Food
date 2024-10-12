@@ -11,6 +11,7 @@ local backgroundPath = "data/assets/background.png"
 
 -- Global variables
 test = nil
+debugParameter = nil
 
 --[[
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -26,9 +27,10 @@ local food = { -- Food coords
     radius = 10
 }
 
-local numFlyies = 20 -- Number of flyies
-local maxSteps = 100 -- Max of steps
-local maxSpeed = 25 -- Max of speed
+local numFlyies = 500 -- Number of flyies
+local maxSteps = 300 -- Max of steps
+local maxSpeed = 50 -- Max of speed
+local mutationRate = 0.01 -- Mutation rate
 
 --[[
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -61,7 +63,7 @@ function love.load()
     assert(background, "Loading error on background.png!")
 
     -- Load the population
-    test = newPopulation(numFlyies, maxSteps, maxSpeed, food) -- Object population
+    test = newPopulation(numFlyies, maxSteps, maxSpeed, food, mutationRate) -- Object population
 end
 
 function love.update(dt)
@@ -74,6 +76,7 @@ function love.update(dt)
         test:update();
         test:show();
     end
+    debugParameter = tostring("Generation: " .. tostring(test.generation))
 end
 
 function love.draw()
@@ -86,4 +89,9 @@ function love.draw()
 
     -- Layer 2 (Flyies)
     test:show();
+
+    -- Final layer (Debug)
+    if debugParameter then
+        debug(debugParameter)
+    end
 end

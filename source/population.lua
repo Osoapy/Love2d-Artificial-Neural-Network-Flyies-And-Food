@@ -3,7 +3,7 @@ require("source.fly")
 require("source.functions")
 
 -- Create population function
-function newPopulation(numFlyies, numSteps, maxSpeed, food)
+function newPopulation(numFlyies, numSteps, maxSpeed, food, mutationRate)
     -- Creating the object
     local population = {
 
@@ -30,7 +30,7 @@ function newPopulation(numFlyies, numSteps, maxSpeed, food)
         end,
 
         update = function(self) 
-            for i = 2, #self.flyies, 1 do
+            for i = 1, #self.flyies, 1 do
                 if self.flyies[i].brain.step > self.maxSteps then -- if the dot has already taken more steps than the best dot has taken to reach the goal kill him
                     self.flyies[i].dead = true; 
                 else
@@ -59,19 +59,20 @@ function newPopulation(numFlyies, numSteps, maxSpeed, food)
             local newFlyies = {}
             self:setBestFly()
             self:calculateFitnessSum()
-
-            newFlyies[1] = self.flyies[self.bestFlyIndex].brain:getBrain()
-            newFlyies[1].isBest = true
-
+        
+            newFlyies[1] = newFly(self.maxSteps, maxSpeed) -- Recreates the best fly
+            newFlyies[1].brain = self.flyies[self.bestFlyIndex].brain:getBrain() -- Copyies the best fly brain
+            newFlyies[1].isBest = true -- Better fly = true
+        
             for i = 2, #self.flyies, 1 do
                 local flyParent = self:selectParent()
-
-                newFlyies[i] = flyParent.brain:getBrain()
+                newFlyies[i] = newFly(self.maxSteps, maxSpeed) -- Creates new fly
+                newFlyies[i].brain = flyParent.brain:getBrain() -- Copy the father's brain
             end
-
+        
             clearTable(self.flyies)
             copyTable(self.flyies, newFlyies)
-
+        
             self.generation = self.generation + 1
         end,
 
@@ -106,7 +107,7 @@ function newPopulation(numFlyies, numSteps, maxSpeed, food)
 
         mutateFlyies = function(self)
             for i = 2, #self.flyies, 1 do
-                self.flyies[i]:mutate()
+                self.flyies[i].brain:mutate(mutationRate)
             end
         end,
 

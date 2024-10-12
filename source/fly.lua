@@ -37,7 +37,7 @@ function newFly(maxSteps, maxSpeed)
                 love.graphics.setColor(0, 1, 0) -- Green
                 love.graphics.circle("fill", self.position.x, self.position.y, 8)
             else
-                love.graphics.setColor(1, 1, 1) -- Black
+                love.graphics.setColor(0, 0, 0) -- Black
                 love.graphics.circle("fill", self.position.x, self.position.y, 4)
             end
         end,
@@ -78,16 +78,16 @@ function newFly(maxSteps, maxSpeed)
 
         calculateFitness = function(self, food)
             if self.reachedFood then
-                self.fitness = 1.0 / 16.0 + 10000.0 / (self.brain.step * self.brain.step)
+                self.fitness = 1.0 / food.radius + self.brain.step
             else
                 local distanceToFood = dist(self.position.x, self.position.y, food.x, food.y)
-                self.fitness = 1.0 / (distanceToFood * distanceToFood)
+                self.fitness = 1.0 / distanceToFood + food.radius + self.brain.step
             end
         end,
 
         clone = function()
             local babyFly = newFly(maxSteps, maxSpeed)
-            babyFly.brain = self.brain:clone()
+            babyFly.brain = self.brain:getBrain()
             return babyFly
         end
     }

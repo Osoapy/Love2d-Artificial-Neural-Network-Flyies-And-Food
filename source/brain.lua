@@ -30,9 +30,7 @@ function newBrain(numSteps)
         end,
 
         -- Mutates the brain
-        mutate = function(self)
-            local mutationRate = 0.01 -- mutationRate
-
+        mutate = function(self, mutationRate)
             for i = 1, #self.directions do
                 local rand = love.math.random()
                 if rand < mutationRate then

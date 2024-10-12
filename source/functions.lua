@@ -21,3 +21,7 @@ function randomVector()
     local y = math.sin(angle)
     return x, y
 end
+
+function debug(parameter)
+    love.graphics.print(tostring(parameter))
+end
