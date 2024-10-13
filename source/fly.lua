@@ -4,6 +4,10 @@ require("source.functions")
 
 -- Create fly function
 function newFly(maxSteps, maxSpeed)
+    -- Asserts
+    assert(type(maxSteps) == "number", "maxSteps must be a number")
+    assert(type(maxSpeed) == "number", "maxSpeed deve be a number")
+
     -- Dynamic atributtes
     local screenHeight = love.graphics.getHeight()
     local screenWidth = love.graphics.getWidth()
@@ -54,7 +58,6 @@ function newFly(maxSteps, maxSpeed)
             self.vel.x = self.vel.x + self.acc.x
             self.vel.y = self.vel.y + self.acc.y
 
-            local maxSpeed = 1
             if self.vel.x > maxSpeed then self.vel.x = maxSpeed end
             if self.vel.x < -maxSpeed then self.vel.x = -maxSpeed end
             if self.vel.y > maxSpeed then self.vel.y = maxSpeed end
@@ -78,10 +81,10 @@ function newFly(maxSteps, maxSpeed)
 
         calculateFitness = function(self, food)
             if self.reachedFood then
-                self.fitness = 1.0 / food.radius + self.brain.step
+                self.fitness = (1.0 / (self.brain.step + 1))
             else
                 local distanceToFood = dist(self.position.x, self.position.y, food.x, food.y)
-                self.fitness = 1.0 / distanceToFood + food.radius + self.brain.step
+                self.fitness = (1.0 / (self.brain.step + distanceToFood * distanceToFood + 1)) 
             end
         end,
 

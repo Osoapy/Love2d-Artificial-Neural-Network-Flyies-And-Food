@@ -3,7 +3,7 @@ require("source.fly")
 require("source.functions")
 
 -- Create population function
-function newPopulation(numFlyies, numSteps, maxSpeed, food, mutationRate)
+function newPopulation(numFlyies, maxSteps, maxSpeed, food, mutationRate)
     -- Creating the object
     local population = {
 
@@ -11,7 +11,6 @@ function newPopulation(numFlyies, numSteps, maxSpeed, food, mutationRate)
         fitnessSum = 0,
         generation = 1,
         bestFlyIndex = 0,
-        maxSteps = numSteps,
 
         -- Tables
         flyies = {},
@@ -25,13 +24,13 @@ function newPopulation(numFlyies, numSteps, maxSpeed, food, mutationRate)
 
         populate = function(self, size)
             for i = 1, size, 1 do
-                table.insert(self.flyies, i, newFly(self.maxSteps, maxSpeed)) 
+                table.insert(self.flyies, i, newFly(maxSteps, maxSpeed)) 
             end
         end,
 
         update = function(self) 
             for i = 1, #self.flyies, 1 do
-                if self.flyies[i].brain.step > self.maxSteps then -- if the dot has already taken more steps than the best dot has taken to reach the goal kill him
+                if self.flyies[i].brain.step > maxSteps then -- if the dot has already taken more steps than the best dot has taken to reach the goal kill him
                     self.flyies[i].dead = true; 
                 else
                     self.flyies[i]:update(food)
@@ -60,13 +59,13 @@ function newPopulation(numFlyies, numSteps, maxSpeed, food, mutationRate)
             self:setBestFly()
             self:calculateFitnessSum()
         
-            newFlyies[1] = newFly(self.maxSteps, maxSpeed) -- Recreates the best fly
+            newFlyies[1] = newFly(maxSteps, maxSpeed) -- Recreates the best fly
             newFlyies[1].brain = self.flyies[self.bestFlyIndex].brain:getBrain() -- Copyies the best fly brain
             newFlyies[1].isBest = true -- Better fly = true
         
             for i = 2, #self.flyies, 1 do
                 local flyParent = self:selectParent()
-                newFlyies[i] = newFly(self.maxSteps, maxSpeed) -- Creates new fly
+                newFlyies[i] = newFly(maxSteps, maxSpeed) -- Creates new fly
                 newFlyies[i].brain = flyParent.brain:getBrain() -- Copy the father's brain
             end
         
@@ -86,12 +85,12 @@ function newPopulation(numFlyies, numSteps, maxSpeed, food, mutationRate)
 
         selectParent = function(self)
             self:calculateFitnessSum()
-
+        
             if self.fitnessSum == 0 then
                 return self.flyies[math.random(1, #self.flyies)] -- Return random fly if fitness = 0
             end
         
-            local rand = math.random(self.fitnessSum)
+            local rand = math.random() * self.fitnessSum
             local runningSum = 0
         
             for i = 1, #self.flyies, 1 do
@@ -100,9 +99,9 @@ function newPopulation(numFlyies, numSteps, maxSpeed, food, mutationRate)
                     return self.flyies[i]
                 end
             end
-
-            -- Shouldn't go here
-            return self.flyies[math.random(1, #self.flyies)]
+        
+            -- Caso ocorra algum erro e o pai não seja selecionado
+            error("No parent selected, something went wrong in the fitness or selection...")
         end,
 
         mutateFlyies = function(self)
@@ -125,7 +124,7 @@ function newPopulation(numFlyies, numSteps, maxSpeed, food, mutationRate)
             self.bestFlyIndex = maxIndex
 
             if self.flyies[self.bestFlyIndex].reachedFood then
-                self.maxSteps = self.flyies[self.bestFlyIndex].brain.steps
+                maxSteps = self.flyies[self.bestFlyIndex].brain.step
             end
         end
     }

@@ -27,9 +27,9 @@ local food = { -- Food coords
     radius = 10
 }
 
-local numFlyies = 500 -- Number of flyies
-local maxSteps = 300 -- Max of steps
-local maxSpeed = 50 -- Max of speed
+local numFlyies = 250 -- Number of flyies
+local maxSteps = 150 -- Max of steps
+local maxSpeed = 3 -- Max of speed
 local mutationRate = 0.01 -- Mutation rate
 
 --[[
