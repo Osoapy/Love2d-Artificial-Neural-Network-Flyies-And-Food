@@ -16,9 +16,9 @@ function newPopulation(numFlyies, maxSteps, maxSpeed, food, mutationRate)
         flyies = {},
 
         -- Functions
-        show = function(self)
+        show = function(self, flyImage)
             for i = 1, numFlyies, 1 do
-                self.flyies[i]:show()
+                self.flyies[i]:show(flyImage)
             end
         end,
 

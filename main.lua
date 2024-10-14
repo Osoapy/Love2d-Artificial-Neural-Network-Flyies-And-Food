@@ -8,6 +8,8 @@ local screenHeight, screenWidth = love.graphics.getHeight(), love.graphics.getWi
 -- Path variables
 local fontPath = "data/assets/jetBrains.ttf"
 local backgroundPath = "data/assets/background.png"
+local foodPath = "data/assets/food.png"
+local flyPath = "data/assets/fly.png"
 
 -- Global variables
 test = nil
@@ -21,10 +23,16 @@ debugParameter = nil
 
 local title = "Better And Better Flyies" -- Window title
 
+love.window.setMode(600, 600, { -- Window configuration
+    resizable = false,
+    minwidth = 600,   
+    minheight = 600
+})
+
 local food = { -- Food coords
     x = screenWidth * 0.65,
     y = screenHeight * 0.2,
-    radius = 10
+    radius = 25
 }
 
 local numFlyies = 250 -- Number of flyies
@@ -39,13 +47,8 @@ local mutationRate = 0.01 -- Mutation rate
 -- Initializing assets
 local myFont = nil
 local background = nil
-
--- Window configuration
-love.window.setMode(600, 600, {
-    resizable = false,
-    minwidth = 600,   
-    minheight = 600
-})
+local foodImage = nil
+local flyImage = nil
 
 function love.load()
     -- Setting a pseudo-randomic seed 
@@ -62,6 +65,14 @@ function love.load()
     background = love.graphics.newImage(backgroundPath)
     assert(background, "Loading error on background.png!")
 
+    -- Load the food
+    foodImage = love.graphics.newImage(foodPath)
+    assert(foodImage, "Loading error on food.png!")
+
+    -- Load the flyies
+    flyImage = love.graphics.newImage(flyPath)
+    assert(foodImage, "Loading error on fly.png!")
+
     -- Load the population
     test = newPopulation(numFlyies, maxSteps, maxSpeed, food, mutationRate) -- Object population
 end
@@ -74,7 +85,7 @@ function love.update(dt)
     else 
         -- if any of the dots are still alive then update and then show them
         test:update();
-        test:show();
+        test:show(flyImage);
     end
     debugParameter = tostring("Generation: " .. tostring(test.generation))
 end
@@ -84,11 +95,10 @@ function love.draw()
     drawBackground(background)
 
     -- Layer 1 (food)
-    love.graphics.setColor(1, 1, 1) -- Green
-    love.graphics.circle("fill", food.x, food.y, food.radius)
+    drawFood(foodImage, food)
 
     -- Layer 2 (Flyies)
-    test:show();
+    test:show(flyImage);
 
     -- Final layer (Debug)
     if debugParameter then

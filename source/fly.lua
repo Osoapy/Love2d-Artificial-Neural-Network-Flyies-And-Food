@@ -26,6 +26,7 @@ function newFly(maxSteps, maxSpeed)
             x = 0,
             y = 0
         },
+        radius = 8,
         fitness = 0,
 
         brain = newBrain(maxSteps),
@@ -36,14 +37,8 @@ function newFly(maxSteps, maxSpeed)
         isBest = false,
 
         -- Functions
-        show = function(self)
-            if self.isBest then
-                love.graphics.setColor(0, 1, 0) -- Green
-                love.graphics.circle("fill", self.position.x, self.position.y, 8)
-            else
-                love.graphics.setColor(0, 0, 0) -- Black
-                love.graphics.circle("fill", self.position.x, self.position.y, 4)
-            end
+        show = function(self, flyImage)
+            drawFly(flyImage, self)
         end,
 
         move = function(self)
