@@ -2,6 +2,9 @@
 require("data.functions.drawLayout")
 require("source.population")
 
+-- Setting a pseudo-randomic seed 
+math.randomseed(os.time())
+
 -- Recieving proportions
 local screenHeight, screenWidth = love.graphics.getHeight(), love.graphics.getWidth()
 
@@ -30,14 +33,16 @@ love.window.setMode(600, 600, { -- Window configuration
 })
 
 local food = { -- Food coords
-    x = screenWidth * 0.65,
-    y = screenHeight * 0.2,
+    -- x = screenWidth * 0.37,
+    -- y = screenHeight * 0.2,
+    x = math.random() * (screenWidth * 0.37),
+    y = math.random() * (screenHeight * 0.2),
     radius = 25
 }
 
-local numFlyies = 250 -- Number of flyies
-local maxSteps = 150 -- Max of steps
-local maxSpeed = 3 -- Max of speed
+local numFlyies = 500 -- Number of flyies
+local maxSteps = 404 -- Max of steps
+local maxSpeed = 2 -- Max of speed
 local mutationRate = 0.01 -- Mutation rate
 
 --[[
@@ -51,9 +56,6 @@ local foodImage = nil
 local flyImage = nil
 
 function love.load()
-    -- Setting a pseudo-randomic seed 
-    math.randomseed(os.time())
-
     -- Setting the title
     love.window.setTitle(title)
 

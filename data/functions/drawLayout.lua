@@ -21,9 +21,12 @@ function drawFly(flyImage, fly)
         love.graphics.setColor(0, 1, 0) -- Green
     end
 
+    -- Calcula the angle using its velocity
+    local angle = math.atan2(fly.vel.y, fly.vel.x)
+
     -- Calculates the scale
     local scale = (fly.radius * 2) / flyImage:getWidth()
 
     -- Draws the image centralized in x, y
-    love.graphics.draw(flyImage, fly.position.x, fly.position.y, 0, scale, scale, flyImage:getWidth() / 2, flyImage:getHeight() / 2)
+    love.graphics.draw(flyImage, fly.position.x, fly.position.y, angle, scale, scale, flyImage:getWidth() / 2, flyImage:getHeight() / 2)
 end
