@@ -1,28 +1,44 @@
 # Love2d-Neural-Network-Flyies-And-Food
 Learning genetic algorithms...
-Well, I will make a "game" for neural networks (my flyies) to try to find the best path for the food. It will use the best one of the flyies as the base for the next generation...
+Well, I will make a "game" for neural networks (my flies) to try to find the best path for the food. It will use the best one of the flies as the base for the next generation...
 
 # Main
 ## In the main, we'll have:
-- Draw all flyies, food, walls (if any)
-- Verify if the generation has ended
+- Draw everything
+- Verify if every fly is dead
+- Mutate every fly
 - Restart
 
 # Population
-## Atributtes:
-- Best fly index
+## Parameters
+- Number of flies
+- Maximum of steps
+- Max speed
+- Food coordinates
+- The mutation rate
+## Internal Atributtes:
+- General fitness
 - Generation count
-- Atributte max
+- Best fly index
+- All flies
 ## Functions:
-- Create flyies
-- Update flyies
-- Mutate the flyies using the best one
+- Show flies
+- Create flies
+- Update flies
+- Calculate fitness
+- Read if all flies are dead
+- Mutate the flies using the best one
 
 # Fly
-## Default Atributtes:
+## Parameters
+- Maximum of steps
+- Max speed
+## Normal Atributtes:
 - Position
 - Velocity
-- Atributte max
+- Acceleration
+- Fly radius
+- Fitness
 ## Boolean Atributtes:
 - Is dead
 - Reached goal
@@ -31,11 +47,22 @@ Well, I will make a "game" for neural networks (my flyies) to try to find the be
 - Move
 - Update
 - Calculate fitness
+- Clone
 
 # Brain
 ## Default Atributtes:
+- Directions
 - Present step
+- Size
 ## Functions:
 - Randomize
 - Get clone
 - Mutate
+
+# Functions
+## dist
+- Distance between 2 dots
+## randomVector
+- Random directions
+## Debug
+- Used for debugging code

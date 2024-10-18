@@ -24,7 +24,7 @@ debugParameter = nil
 
 -- ENVIRORMENT VARIABLES
 
-local title = "Better And Better Flyies" -- Window title
+local title = "Better And Better Flies" -- Window title
 
 love.window.setMode(600, 600, { -- Window configuration
     resizable = false,
@@ -40,10 +40,10 @@ local food = { -- Food coords
     radius = 25
 }
 
-local numFlyies = 500 -- Number of flyies
+local numFlies = 500 -- Number of flies
 local maxSteps = 404 -- Max of steps
 local maxSpeed = 2 -- Max of speed
-local mutationRate = 0.01 -- Mutation rate
+local mutationRate = 0.05 -- Mutation rate
 
 --[[
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -71,19 +71,19 @@ function love.load()
     foodImage = love.graphics.newImage(foodPath)
     assert(foodImage, "Loading error on food.png!")
 
-    -- Load the flyies
+    -- Load the flies
     flyImage = love.graphics.newImage(flyPath)
     assert(foodImage, "Loading error on fly.png!")
 
     -- Load the population
-    test = newPopulation(numFlyies, maxSteps, maxSpeed, food, mutationRate) -- Object population
+    test = newPopulation(numFlies, maxSteps, maxSpeed, food, mutationRate) -- Object population
 end
 
 function love.update(dt)
     if test:allFlyiesDead() then
         test:calculateFitness(food);
         test:naturalSelection();
-        test:mutateFlyies();
+        test:mutateFlies();
     else 
         -- if any of the dots are still alive then update and then show them
         test:update();
@@ -99,7 +99,7 @@ function love.draw()
     -- Layer 1 (food)
     drawFood(foodImage, food)
 
-    -- Layer 2 (Flyies)
+    -- Layer 2 (flies)
     test:show(flyImage);
 
     -- Final layer (Debug)
