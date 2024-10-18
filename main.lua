@@ -32,7 +32,7 @@ love.window.setMode(600, 600, { -- Window configuration
     minheight = 600
 })
 
-local food = { -- Food coords
+local food = { -- Food coords & Radius
     -- x = screenWidth * 0.37,
     -- y = screenHeight * 0.2,
     x = math.random() * (screenWidth * 0.37),
@@ -81,11 +81,12 @@ end
 
 function love.update(dt)
     if test:allFlyiesDead() then
+        -- If none of the dots are alive, calculate the fitness based on the food and start the next generation
         test:calculateFitness(food);
         test:naturalSelection();
         test:mutateFlies();
     else 
-        -- if any of the dots are still alive then update and then show them
+        -- If any of the dots are still alive then update and then show them
         test:update();
         test:show(flyImage);
     end

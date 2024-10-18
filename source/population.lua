@@ -69,7 +69,7 @@ function newPopulation(numFlies, maxSteps, maxSpeed, food, mutationRate)
                 newFlies[i].brain = flyParent.brain:getBrain() -- Copy the father's brain
             end
         
-            clearTable(self.flies)
+            clearTable(self.flies) -- Clear all the past flies
             copyTable(self.flies, newFlies)
         
             self.generation = self.generation + 1
@@ -100,7 +100,7 @@ function newPopulation(numFlies, maxSteps, maxSpeed, food, mutationRate)
                 end
             end
         
-            -- Caso ocorra algum erro e o pai não seja selecionado
+            -- If parent selected, assert that something went wrong in the fitness or selection (shouldn't get here)
             error("No parent selected, something went wrong in the fitness or selection...")
         end,
 
